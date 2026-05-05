@@ -18,3 +18,29 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
+
+resilience4j:
+
+  circuitbreaker:
+    instances:
+      kafkaPublishCB:
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+        permittedNumberOfCallsInHalfOpenState: 3
+        minimumNumberOfCalls: 5
+
+  retry:
+    instances:
+      kafkaPublishRetry:
+        maxAttempts: 3
+        waitDuration: 2s
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  health:
+    circuitbreakers:
+      enabled: true
